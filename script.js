@@ -1,8 +1,7 @@
 cities = ["Austin", "New York", "London"]
 // displayWeather function re-renders the HTML to display the appropriate content
-function displayWeather() {
+function displayWeather(city) {
 
-  var city = $(this).attr("data-name");
   var currentQueryUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=6c814b3476e3dccefc544cd800fb5edf&units=imperial";
 
   // AJAX call for current weather
@@ -26,6 +25,7 @@ function displayWeather() {
     }).then(function (response) {
       console.log(response);
       // Current weather
+      $("#today-div").empty();
       var todayIcon = response.current.weather[0].icon;
       var todayIconUrl = "http://openweathermap.org/img/wn/" + todayIcon + "@2x.png";
       var currentCity = name + "  -  " + moment().format("dddd, MMMM DD");
@@ -35,7 +35,7 @@ function displayWeather() {
       var currentUV = response.current.uvi;
 
       var title = $("<h3>").addClass("card-title").text(currentCity);
-      var todayCard = $("<div>").addClass("card");
+      var todayCard = $("<div>").addClass("card bg-primary");
       var wind = $("<p>").addClass("card-text").text("Wind Speed: " + currentWind + " MPH");
       var humid = $("<p>").addClass("card-text").text("Humidity: " + currentHumid + "%");
       var temp = $("<p>").addClass("card-text").text("Temperature: " + currentTemp + " °F");
@@ -43,14 +43,33 @@ function displayWeather() {
       var img = $("<img>").attr("src", todayIconUrl);
       var uvIndex = $("<p>").text("UV Index: " + currentUV);
 
-      title.append(img);
-      cardBody.append(title, temp, humid, wind, uvIndex, futureDate);
+      cardBody.append(title, img, temp, humid, wind, uvIndex);
       todayCard.append(cardBody);
       $("#today-div").append(todayCard);
 
+      // 5-Day
+      $("#five-day-div").empty();
+      for (let i = 1; i < 6; i++) {
 
+        let futureDate = moment().add(i, 'days').format("MMM DD");
+        let futureIcon = response.daily[i].weather[0].icon;
+        let futureIconUrl = "http://openweathermap.org/img/wn/" + futureIcon + "@2x.png";
+        let futureTemp = response.daily[i].temp.max;
+        let futureHumid = response.daily[i].humidity;
 
-    });
+        let futureCard = $("<div>").addClass("card bg-primary");
+        let futureCardBody = $("<div>").addClass("card-body justify-content-center");
+        let futureTitle = $("<h5>").addClass("card-title pt-2 text-center").text(futureDate);
+        let futureImg = $("<img>").attr("src", futureIconUrl);
+        let futureTempEl = $("<p>").addClass("card-text").text("Temperature: " + futureTemp + " °F");
+        let futureHumidEl = $("<p>").addClass("card-text").text("Humidity: " + futureHumid + "%");
+
+        futureCardBody.append(futureImg, futureTempEl, futureHumidEl);
+        futureCard.append(futureTitle, futureCardBody);
+        $("#five-day-div").append(futureCard);
+      }
+
+    })
 
 
   });
@@ -88,18 +107,23 @@ $("#search-btn").on("click", function (event) {
 
   // Adding city from the textbox to our array
   if (cities.indexOf(city) === -1) {
-    cities.push(city);
+    cities.unshift(city);
     window.localStorage.setItem("cities", JSON.stringify(cities));
 
     // Calling renderButtons which handles the processing of our cities array
     renderButtons();
   }
+  displayWeather(city);
 });
 
 // Adding a click event listener to all elements with a class of "city-btn"
-$(document).on("click", ".city-btn", displayWeather);
+$(document).on("click", ".city-btn", function (city) {
+  var city = $(this).attr("data-name");
+  displayWeather(city);
+});
 
 // Calling the renderButtons function to display the initial buttons
 var cities = JSON.parse(window.localStorage.getItem("cities")) || ["Austin", "New York", "London"];
 renderButtons();
+displayWeather(cities[0]);
 
