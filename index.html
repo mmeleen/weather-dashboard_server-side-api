@@ -6,12 +6,8 @@
   <title>Weather Dashboard</title>
 
   <!-- Bootswatch, Font Awesome, and Google Fonts links -->
-  <link 
-    href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/darkly/bootstrap.min.css" 
-    rel="stylesheet" 
-    integrity="sha384-Bo21yfmmZuXwcN/9vKrA5jPUMhr7znVBBeLxT9MA4r2BchhusfJ6+n8TLGUcRAtL" 
-    crossorigin="anonymous"
-  />
+  <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/darkly/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Bo21yfmmZuXwcN/9vKrA5jPUMhr7znVBBeLxT9MA4r2BchhusfJ6+n8TLGUcRAtL" crossorigin="anonymous" />
   <script src="https://kit.fontawesome.com/550527528e.js" crossorigin="anonymous"></script>
   <!-- <link
     href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
@@ -23,25 +19,39 @@
 
   <div class="container">
     <h1>Weather Dashboard</h1>
+    <div class="row">
+      <div class="col-3">
+        <!-- City search form -->
+        <form id="city-form">
+          <label for="city-input">Search for a City:</label>
+          <input type="text" id="city-input">
+          <button id="search-btn" type="submit"><i class='fab fa-searchengin'></i></button>
+        </form>
 
-    <!-- City search history div  -->
-    <div id="buttons-view"></div>
+        <!-- City search history div  -->
+        <div id="history-div">
+          <div id="buttons-list" class="list-group">
+          </div>
+        </div>
+      </div>
+      <div class="col-9">
+        <!-- Weather display divs-->
+        <div class="row">
+          <div id="today-div" class="card w-100">
+          </div>
+        </div>
+        <div class="row">
+          <div id="future-div" class="container">
+            <div id="five-day-div" class="card-group"></div>
+          </div>
+        </div>
+      </div>
+      </row>
 
-    <!-- City search form -->
-    <form id="city-form">
-      <label for="city-input">Search for a City:</label>
-      <input type="text" id="city-input">
-      <button id="search-btn" type="submit"><i class='fab fa-searchengin'></i></button>
-    </form>
-
-    <!-- Weather display divs-->
-    <div id="current-weather-div"></div>
-    <div id ="five-day-div"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="script.js" type="text/javascript"></script>
-  </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+      <script src="script.js" type="text/javascript"></script>
+    </div>
 </body>
 
 </html>
-
